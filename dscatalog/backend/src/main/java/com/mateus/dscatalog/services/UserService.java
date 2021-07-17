@@ -11,6 +11,7 @@ import com.mateus.dscatalog.domain.User;
 import com.mateus.dscatalog.dtos.RoleDTO;
 import com.mateus.dscatalog.dtos.UserDTO;
 import com.mateus.dscatalog.dtos.UserInsertDTO;
+import com.mateus.dscatalog.dtos.UserUpdateDTO;
 import com.mateus.dscatalog.repositories.RoleRepository;
 import com.mateus.dscatalog.repositories.UserRepository;
 import com.mateus.dscatalog.services.exceptions.DatabaseException;
@@ -66,12 +67,11 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(Long id, UserInsertDTO userDto) {
+    public UserDTO update(Long id, UserUpdateDTO userDto) {
         try {
             User user = userRepository.getById(id);
             copyDtoToEntity(userDto, user);
             user = userRepository.save(user);
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
             return new UserDTO(user);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("ID Not Found: " + id);

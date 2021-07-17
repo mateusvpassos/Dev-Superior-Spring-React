@@ -4,6 +4,7 @@ import java.net.URI;
 
 import com.mateus.dscatalog.dtos.UserDTO;
 import com.mateus.dscatalog.dtos.UserInsertDTO;
+import com.mateus.dscatalog.dtos.UserUpdateDTO;
 import com.mateus.dscatalog.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class UserResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserInsertDTO userDto) {
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO userDto) {
         UserDTO newDto = userService.update(id, userDto);
         return ResponseEntity.ok().body(newDto);
     }
