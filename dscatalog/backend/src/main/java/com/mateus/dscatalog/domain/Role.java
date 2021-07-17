@@ -2,34 +2,27 @@ package com.mateus.dscatalog.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_category")
-public class Category implements Serializable {
-
+@Table(name = "tb_role")
+public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String authority;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant createdAt;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant updatedAt;
-
-    @ManyToMany(mappedBy = "categories")
-    Set<Product> products = new HashSet<>();
 
     @PrePersist
     public void prePersist() {
@@ -41,29 +34,20 @@ public class Category implements Serializable {
         updatedAt = Instant.now();
     }
 
-    public Category() {
+    public Role() {
     }
 
-    public Category(Long id, String name) {
-        super();
+    public Role(Long id, String authority) {
         this.id = id;
-        this.name = name;
+        this.authority = authority;
+    }
+
+    public String getAuthority() {
+        return authority;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Instant getCreatedAt() {
@@ -74,8 +58,12 @@ public class Category implements Serializable {
         return updatedAt;
     }
 
-    public Set<Product> getProducts() {
-        return products;
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
@@ -94,7 +82,7 @@ public class Category implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Category other = (Category) obj;
+        Role other = (Role) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
