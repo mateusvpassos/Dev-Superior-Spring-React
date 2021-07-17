@@ -1,25 +1,36 @@
 package com.mateus.dscatalog.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_category")
-public class Category implements Serializable {
-
+@Table(name = "tb_product")
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
+    private String description;
+    private BigDecimal price;
+    private String imgUrl;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant moment;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant createdAt;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
@@ -35,13 +46,20 @@ public class Category implements Serializable {
         updatedAt = Instant.now();
     }
 
-    public Category() {
+    @ManyToMany
+    @JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    Set<Category> categories = new HashSet<>();
+
+    public Product() {
     }
 
-    public Category(Long id, String name) {
-        super();
+    public Product(Long id, String name, String description, BigDecimal price, String imgUrl, Instant moment) {
         this.id = id;
         this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imgUrl = imgUrl;
+        this.moment = moment;
     }
 
     public Long getId() {
@@ -52,6 +70,22 @@ public class Category implements Serializable {
         return name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public Instant getMoment() {
+        return moment;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -60,12 +94,24 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public void setMoment(Instant moment) {
+        this.moment = moment;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
     }
 
     @Override
@@ -84,7 +130,7 @@ public class Category implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Category other = (Category) obj;
+        Product other = (Product) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
